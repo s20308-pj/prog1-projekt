@@ -122,6 +122,7 @@ void draw(int tab_plansza[17][17]) {
 	start_y = 2;
 	start_x = 4;
 	//rysowanie planszy
+	stat();
 	WINDOW *plansza = newwin(plansza_x * 2 + 2, plansza_y * 4 + 2, start_y, start_x);
 	for (int i=0;i<height;i++)
 	{
@@ -186,10 +187,16 @@ void draw(int tab_plansza[17][17]) {
   mvwprintw(plansza, 0, plansza_y/2-3, "poziom %d", gracz.poziom);
 	WINDOW *Gracz = newwin(2,4, gracz.x*2+1, gracz.y*4+1);
 	mvwprintw(Gracz,0,1,"_o_");
-	mvwprintw(Gracz,1,1,",V,");
+	mvwprintw(Gracz,1,1,",^,");
 	move(0,0);
 	wrefresh(plansza);
 	wrefresh(Gracz);
+}
+
+void stat()
+{
+	mvprintw(38,5,"ZYCIE %d  \t   SILA %d \tMOC %d  \tZLOTO %d \tKLUCZ %d", gracz.hp, gracz.sila, gracz.moc, gracz.zloto, gracz.klucz);
+	refresh();
 }
 
 int input()
@@ -299,7 +306,7 @@ int czy_mozna(postac &gracz)
 int mwalka(postac &gracz)
 {
 	int zwrot;
-	okno mwalka(10,36,10,20);
+	okno mwalka(10,36,10,21);
 	WINDOW *wmwalka=newwin(mwalka.kolumny, mwalka.wiersze, mwalka.x, mwalka.y);
 	box(wmwalka, 0, 0);
 	mag m1;
@@ -333,6 +340,7 @@ int mwalka(postac &gracz)
 		mvwprintw(wmwalka, 7, 5,"atak:%d\tatak %d", gracz.moc, m1.moc);
 		mvwprintw(wmwalka, 8, 5,"zycie:%d\tzycie: %d", gracz.hp, m1.hp);
 		wrefresh(wmwalka);
+		stat();
 	}
 	wclear(wmwalka);
 	box(wmwalka, 0, 0);
@@ -362,7 +370,7 @@ int mwalka(postac &gracz)
 int wwalka(postac &gracz)
 {
 	int zwrot;
-	okno wwalka(10,36,10,20);
+	okno wwalka(10,36,10,21);
 	WINDOW *wwwalka=newwin(wwalka.kolumny, wwalka.wiersze, wwalka.x, wwalka.y);
 	box(wwwalka, 0, 0);
 	woj w1;
@@ -397,12 +405,13 @@ int wwalka(postac &gracz)
 		mvwprintw(wwwalka, 7, 5,"atak:%d\tatak %d", gracz.sila, w1.sila);
 		mvwprintw(wwwalka, 8, 5,"zycie:%d\tzycie: %d", gracz.hp, w1.hp);
 		wrefresh(wwwalka);
+		stat();
 	}
 	wclear(wwwalka);
 	box(wwwalka, 0, 0);
 	if (w1.smierc == true)
 	{
-	int loot = kosc(10)+2;
+	int loot = kosc(10)+10;
 	gracz.zloto +=loot;
 	mvwprintw(wwwalka, 2, 2,"pokonales przeciwnika,");	
 	mvwprintw(wwwalka, 3, 2,"znalazles  %d ZLOTA",loot);
@@ -426,7 +435,7 @@ int wwalka(postac &gracz)
 int swalka(postac &gracz)
 {
 	int zwrot;
-	okno swalka(10,40,10,18);
+	okno swalka(10,40,10,21);
 	WINDOW *wswalka=newwin(swalka.kolumny, swalka.wiersze, swalka.x, swalka.y);
 	box(wswalka, 0, 0);
 	str s1;
@@ -467,6 +476,7 @@ int swalka(postac &gracz)
 		mvwprintw(wswalka, 7, 5,"atak:%d\tatak %d", gracz.sila+gracz.moc, s1.atak);
 		mvwprintw(wswalka, 8, 5,"zycie:%d\tzycie: %d", gracz.hp, s1.hp);
 		wrefresh(wswalka);
+		stat();
 	}
 	wclear(wswalka);
 	box(wswalka, 0, 0);
@@ -603,22 +613,30 @@ void kufer (postac &gracz)
 	int wynik = kosc(10);
 	int los = kosc(10);
 	mvwprintw(wkufer, 2, 4,"odkryles stary kufer %d", los);
-	if (los == 1)
+	switch (los)
 	{
-		mvwprintw(wkufer, 3, 7,"znalazles eliksir SILY %d", los);
-		gracz.sila++;
-	} if (los == 2)
+		case 1:
+			mvwprintw(wkufer, 3, 4,"znalazles eliksir SILY");
+			gracz.sila++;
+			break;
+		case 2:
+			mvwprintw(wkufer, 3, 4,"znalazles eliksir MOCY");
+			gracz.moc++;
+			break;
+		case 3:
+			mvwprintw(wkufer, 3, 4,"znalazles klucz");
+			gracz.klucz++;
+			break;
+	}
+
+	if (los >= 4 and los <=5)
 	{
-		mvwprintw(wkufer, 3, 7,"znalazles eliksir MOCY %d", los);
-		gracz.moc++;
-	} if (los <= 3 && los >=5)
-		{
-		mvwprintw(wkufer, 3, 7,"znalazles eliksir ZYCIA %d", los);
+		mvwprintw(wkufer, 3, 4,"znalazles eliksir ZYCIA");
 		gracz.hp += wynik+5;
-	} else
+	} if (los >5)
 	{
-		mvwprintw(wkufer, 3, 7,"w srodku znalazles %d ZLOTA, %d", wynik+5, los);
-		gracz.zloto += wynik+5;
+		mvwprintw(wkufer, 3, 4,"w srodku znalazles %d ZLOTA,", wynik*2+5);
+		gracz.zloto += wynik*2+5;
 	}
 	tab_plansza[gracz.x-1][gracz.y-1]=0; 
 	wrefresh(wkufer);
@@ -626,6 +644,7 @@ void kufer (postac &gracz)
 }
 void sklep()
 {
+	int menu = 0;
 	int zakup;
 	okno sklep(19,38,12,20);
 	WINDOW *wsklep=newwin(sklep.kolumny, sklep.wiersze, sklep.x, sklep.y);
@@ -649,54 +668,58 @@ void sklep()
 	mvwprintw(wsklep, 17, 1,"....................................");
 	wrefresh(wsklep);
 	getch();
-	zakup=sklep_menu();
-	switch(zakup)
+	do 
 	{
-		case 0:
-			if (gracz.zloto >50)
-			{
-				gracz.zloto -= 50;
-				gracz.hp +=10;
-				mvwprintw(wsklep, 6, 10,"KUPILES_ZYCIE");
-			} else 
+		zakup=sklep_menu(menu);
+		switch(zakup)
+		{
+			case 0:
+				if (gracz.zloto >=50)
+				{
+					gracz.zloto -= 50;
+					gracz.hp +=10;
+					mvwprintw(wsklep, 6, 10,"KUPILES_ZYCIE");
+				} else 
+					mvwprintw(wsklep, 6, 13,"BRAK_ZLOTA");
+				break;
+			case 1:
+				if (gracz.zloto >= 100)
+				{
+					gracz.zloto -= 100;
+					gracz.sila +=1;
+					mvwprintw(wsklep, 6, 10,"KUPILES_SILE");
+				} else 
+					mvwprintw(wsklep, 6, 13,"BRAK_ZLOTA");
+				break;
+			case 2:
+				if (gracz.zloto >= 100)
+				{
+					gracz.zloto -= 100;
+					gracz.moc +=1;
+					mvwprintw(wsklep, 6, 10,"KUPILES_MOC");
+				} else 
 				mvwprintw(wsklep, 6, 13,"BRAK_ZLOTA");
-			break;
-		case 1:
-			if (gracz.zloto >100)
-			{
-				gracz.zloto -= 100;
-				gracz.sila +=1;
-				mvwprintw(wsklep, 6, 10,"KUPILES_SILE");
-			} else 
-				mvwprintw(wsklep, 6, 13,"BRAK_ZLOTA");
-			break;
-		case 2:
-			if (gracz.zloto > 100)
-			{
-				gracz.zloto -= 100;
-				gracz.moc +=1;
-				mvwprintw(wsklep, 6, 10,"KUPILES_MOC");
-			} else 
-				mvwprintw(wsklep, 6, 13,"BRAK_ZLOTA");
-			break;
-	}
+				break;
+		}
+	wrefresh(wsklep);
+	stat();
+	} while ( zakup != 3);
 	delwin(wsklep);
 }
 
-int sklep_menu()
+int sklep_menu(int menu)
 {
-	WINDOW *winmenu=newwin(7, 12, 16, 30);
+	WINDOW *winmenu=newwin(7, 12, 20, 33);
 	box(winmenu, 0, 0);
 	refresh();
 	wrefresh(winmenu);
 	keypad(winmenu, true);
 	std::string wybory[5] = {"KUP ZYCIE", "KUP SILE", "KUP MOC", "WYJDZ"};
 	int wybor;
-	int menu=0;
 	
 	while(1)
 	{
-		for (int i=0;i<4;i++)
+		for (int i=0; i<4; i++)
 		{
 			if (i==menu)
 				wattron(winmenu, A_REVERSE);
@@ -775,27 +798,27 @@ void wczytaj_mape()
 
 void koniec()
 {
-okno koniec(24,31,8,24);
+okno koniec(24,35,8,22);
 WINDOW *koniec_gry=newwin(koniec.kolumny, koniec.wiersze, koniec.x, koniec.y);
 box(koniec_gry,0,0);
-	mvwprintw(koniec_gry, 3, 1, "     XXXXXXXXXXXXXXXXXXX     ");
-	mvwprintw(koniec_gry, 4, 1, "     XXXXXX       XXXXXX     ");
-	mvwprintw(koniec_gry, 5, 1, "     XXX             XXX     ");
-	mvwprintw(koniec_gry, 6, 1, "     XX               XX     ");
-	mvwprintw(koniec_gry, 7, 1, "     X                 X     ");
-	mvwprintw(koniec_gry, 8, 1, "     X   XXXX   XXXX   X     ");
-	mvwprintw(koniec_gry, 9, 1, "     X   XXXX   XXXX   X     ");
-	mvwprintw(koniec_gry, 10, 1, "     XX    XX   XX    XX     ");
-	mvwprintw(koniec_gry, 11, 1, "     XX       X       XX     ");
-	mvwprintw(koniec_gry, 12, 1, "     XXXX    XXX     XXX     ");
-	mvwprintw(koniec_gry, 13, 1, "     XXXXX   X X   XXXXX     ");
-	mvwprintw(koniec_gry, 14, 1, "     XXXXX         XXXXX     ");
-	mvwprintw(koniec_gry, 15, 1, "     XXXXXxX X X XxXXXXX     ");
-	mvwprintw(koniec_gry, 16, 1, "     XXXXXXXXXXXXXXXXXXX     ");
-	mvwprintw(koniec_gry, 17, 1, "     XX...............XX     ");
-	mvwprintw(koniec_gry, 18, 1, "     XX..KONIEC..GRY..XX     ");
-	mvwprintw(koniec_gry, 19, 1, "     XX...............XX     ");
-	mvwprintw(koniec_gry, 20, 1, "     XXXXXXXXXXXXXXXXXXX     ");
+	mvwprintw(koniec_gry, 3, 1, "     XXXXXXXXXXXXXXXXXXXXXXX     ");
+	mvwprintw(koniec_gry, 4, 1, "     XXXXXXXX       XXXXXXXX     ");
+	mvwprintw(koniec_gry, 5, 1, "     XXXXX             XXXXX     ");
+	mvwprintw(koniec_gry, 6, 1, "     XXXX               XXXX     ");
+	mvwprintw(koniec_gry, 7, 1, "     XXX                 XXX     ");
+	mvwprintw(koniec_gry, 8, 1, "     XXX   XXXX   XXXX   XXX     ");
+	mvwprintw(koniec_gry, 9, 1, "     XXX   XXXX   XXXX   XXX     ");
+	mvwprintw(koniec_gry, 10, 1, "     XXXX    XX   XX    XXXX     ");
+	mvwprintw(koniec_gry, 11, 1, "     XXXX       X       XXXX     ");
+	mvwprintw(koniec_gry, 12, 1, "     XXXXXX    XXX     XXXXX     ");
+	mvwprintw(koniec_gry, 13, 1, "     XXXXXXX   X X   XXXXXXX     ");
+	mvwprintw(koniec_gry, 14, 1, "     XXXXXXX         XXXXXXX     ");
+	mvwprintw(koniec_gry, 15, 1, "     XXXXXXXxX X X XxXXXXXXX     ");
+	mvwprintw(koniec_gry, 16, 1, "     XXXXXXXXXXXXXXXXXXXXXXX     ");
+	mvwprintw(koniec_gry, 17, 1, "     XXXX...............XXXX     ");
+	mvwprintw(koniec_gry, 18, 1, "     XXXX..KONIEC..GRY..XXXX     ");
+	mvwprintw(koniec_gry, 19, 1, "     XXXX...............XXXX     ");
+	mvwprintw(koniec_gry, 20, 1, "     XXXXXXXXXXXXXXXXXXXXXXX     ");
 	wrefresh(koniec_gry);
 	usleep(300000);
 	getch();

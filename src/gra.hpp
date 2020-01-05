@@ -53,7 +53,7 @@ struct mag {
 	mag ()
 	{
 		hp = 8;
-		moc = 7;
+		moc = 6;
 		smierc=false;
 	}
 	mag (int h, int m, bool sm)
@@ -123,6 +123,7 @@ struct str {
 
 void setup();
 void draw(int [17][17]);
+void stat();
 void czyszczenie();
 int input();
 int kosc(int);
@@ -142,7 +143,7 @@ void koniec();
 void zapisz();
 void wczytaj();
 void sklep();
-int sklep_menu();
+int sklep_menu(int);
 
 
 
