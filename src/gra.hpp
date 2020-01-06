@@ -48,7 +48,7 @@ struct mag {
   bool smierc;
   mag() {
     hp = 8;
-    moc = 5;
+    moc = 6;
     smierc = false;
   }
   mag(int h, int m, bool sm) {
@@ -69,7 +69,7 @@ struct woj {
   bool smierc;
   woj() {
     hp = 10;
-    sila = 5;
+    sila = 6;
     smierc = false;
   }
   woj(int h, int s, bool sm) {
@@ -89,8 +89,8 @@ struct str {
   int atak;
   bool smierc;
   str() {
-    hp = 16;
-    atak = 16;
+    hp = 12;
+    atak = 8;
     smierc = false;
   }
   str(int h, int a, bool sm) {

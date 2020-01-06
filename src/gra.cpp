@@ -96,6 +96,8 @@ int menu_input() {
     case 4:
       mvwprintw(wnmanu, 2, 3, "Wyjdz z gry");
       break;
+    default:
+      break;
     }
     wrefresh(wnmanu);
   }
@@ -113,7 +115,6 @@ void czyszczenie() {
 void draw(int tab_plansza[17][17]) {
   start_y = 2;
   start_x = 4;
-  // rysowanie planszy
   stat();
   WINDOW *plansza =
       newwin(plansza_x * 2 + 2, plansza_y * 4 + 2, start_y, start_x);
@@ -165,7 +166,6 @@ void draw(int tab_plansza[17][17]) {
   }
   refresh();
   box(plansza, 0, 0);
-  // rysowanie gracza
   mvwprintw(plansza, 0, plansza_y / 2 - 3, "poziom %d", gracz.poziom);
   WINDOW *Gracz = newwin(2, 4, gracz.x * 2 + 1, gracz.y * 4 + 1);
   mvwprintw(Gracz, 0, 1, "_o_");
@@ -176,7 +176,8 @@ void draw(int tab_plansza[17][17]) {
 }
 
 void stat() {
-  mvprintw(38, 5, "ZYCIE %d  \t   SILA %d \tMOC %d  \tZLOTO %d \tKLUCZ %d",
+  mvprintw(38, 5, "\t\t\t\t\t\t\t\t\t\t\t");
+  mvprintw(38, 5, "ZYCIE %d  \t  SILA %d \tMOC %d  \tZLOTO %d \tKLUCZ %d",
            gracz.hp, gracz.sila, gracz.moc, gracz.zloto, gracz.klucz);
   refresh();
 }
@@ -223,7 +224,6 @@ void interakcja(postac &gracz, int inp, int tab_plansza[17][17]) {
     if (gracz.x > plansza_mx - 1 || czy_mozna(gracz) == 1)
       gracz.x--;
     break;
-
   case 3:
     gracz.y--;
     if (gracz.y < 2 || czy_mozna(gracz) == 1)
@@ -233,6 +233,8 @@ void interakcja(postac &gracz, int inp, int tab_plansza[17][17]) {
     gracz.y++;
     if (gracz.y > plansza_my - 1 || czy_mozna(gracz) == 1)
       gracz.y--;
+    break;
+  default:
     break;
   }
   switch (tab_plansza[gracz.x - 1][gracz.y - 1]) {
@@ -251,6 +253,8 @@ void interakcja(postac &gracz, int inp, int tab_plansza[17][17]) {
     break;
   case 5:
     kufer(gracz);
+    break;
+  default:
     break;
   }
 }
@@ -275,6 +279,8 @@ int czy_mozna(postac &gracz) {
   case 9:
     powrot = drzwi(gracz);
     break;
+  default:
+    break;
   }
   return powrot;
 }
@@ -285,8 +291,8 @@ int mwalka(postac &gracz) {
   WINDOW *wmwalka = newwin(mwalka.kolumny, mwalka.wiersze, mwalka.x, mwalka.y);
   box(wmwalka, 0, 0);
   mag m1;
-  int lvl = 2 * (1 + gracz.poziom);
-  m1.poziom(kosc(lvl + 1));
+  int lvl = 4 * (gracz.poziom);
+  m1.poziom(kosc(1 + gracz.poziom)+lvl);
   while (!gracz.smierc && !m1.smierc) {
     wclear(wmwalka);
     box(wmwalka, 0, 0);
@@ -325,10 +331,13 @@ int mwalka(postac &gracz) {
     if (gracz.expm > 20) {
       gracz.moc++;
       gracz.expm -= 20;
+      mvwprintw(wmwalka, 4, 2, "zdobywasz punkt MOCY    ");
     }
     zwrot = 0;
-  } else
+  } else {
     zwrot = 1;
+    mvwprintw(wmwalka, 2, 2, "przegrywasz walke");
+  }
   wrefresh(wmwalka);
   usleep(300000);
   getch();
@@ -342,8 +351,8 @@ int wwalka(postac &gracz) {
   WINDOW *wwwalka = newwin(wwalka.kolumny, wwalka.wiersze, wwalka.x, wwalka.y);
   box(wwwalka, 0, 0);
   woj w1;
-  int lvl = 2 * (1 + gracz.poziom);
-  w1.poziom(kosc(lvl + 1));
+  int lvl = 4 * (gracz.poziom);
+  w1.poziom(kosc(2 + gracz.poziom)+lvl);
   while (!gracz.smierc && !w1.smierc) {
     wclear(wwwalka);
     box(wwwalka, 0, 0);
@@ -382,10 +391,13 @@ int wwalka(postac &gracz) {
     if (gracz.exps > 20) {
       gracz.sila++;
       gracz.exps -= 20;
+      mvwprintw(wwwalka, 2, 2, "zdobywasz punkt SILY   ");
     }
     zwrot = 0;
-  } else
+  } else {
     zwrot = 1;
+    mvwprintw(wwwalka, 2, 2, "przegrywasz walke");
+  }
   wrefresh(wwwalka);
   usleep(200000);
   getch();
@@ -399,8 +411,8 @@ int swalka(postac &gracz) {
   WINDOW *wswalka = newwin(swalka.kolumny, swalka.wiersze, swalka.x, swalka.y);
   box(wswalka, 0, 0);
   str s1;
-  int lvl = 4 * (1 + gracz.poziom);
-  s1.poziom(kosc(lvl);
+  int lvl = 6 * (1 + gracz.poziom);
+  s1.poziom(kosc(3 + gracz.poziom)+lvl);
   switch (kosc(2) + 1) {
   case 1:
     mvwprintw(wswalka, 2, 2, "atakuje cie straszny mag");
@@ -449,14 +461,18 @@ int swalka(postac &gracz) {
     if (gracz.exps > 20) {
       gracz.sila++;
       gracz.exps -= 20;
+      mvwprintw(wswalka, 4, 2, "zdobywasz punkt SILY   ");
     }
     if (gracz.expm > 20) {
       gracz.moc++;
       gracz.expm -= 20;
+      mvwprintw(wswalka, 4, 2, "zdobywasz punkt MOCY   ");
     }
     zwrot = 0;
-  } else
+  } else {
     zwrot = 1;
+    mvwprintw(wswalka, 2, 2, "przegrywasz walke");
+  }
   wrefresh(wswalka);
   usleep(300000);
   getch();
@@ -483,11 +499,11 @@ int walka(int przeciwnik, int gracz) {
   if (kosc_gracz == 6) {
     kosc_gracz += 5;
     gracz += kosc_gracz;
-    mvwprintw(wwalka, 4, 4, "zadales przeciwnikowi cios krytyczny!!! wynik: %d",
+    mvwprintw(wwalka, 3, 4, "zadales przeciwnikowi cios krytyczny!!! wynik: %d",
               gracz);
   } else {
     gracz += kosc_gracz;
-    mvwprintw(wwalka, 4, 4, "zadales przeciwnikowi : %d", gracz);
+    mvwprintw(wwalka, 3, 4, "zadales przeciwnikowi : %d", gracz);
   }
   wrefresh(wwalka);
   usleep(300000);
@@ -556,11 +572,11 @@ void kufer(postac &gracz) {
   mvwprintw(wkufer, 2, 4, "odkryles stary kufer %d", los);
   switch (los) {
   case 1:
-    mvwprintw(wkufer, 3, 4, "znalazles eliksir SILY");
+    mvwprintw(wkufer, 3, 4, "znalazles eliksir SILY  ");
     gracz.sila++;
     break;
   case 2:
-    mvwprintw(wkufer, 3, 4, "znalazles eliksir MOCY");
+    mvwprintw(wkufer, 3, 4, "znalazles eliksir MOCY  ");
     gracz.moc++;
     break;
   case 3:
@@ -570,7 +586,7 @@ void kufer(postac &gracz) {
   }
 
   if (los >= 4 and los <= 5) {
-    mvwprintw(wkufer, 3, 4, "znalazles eliksir ZYCIA");
+    mvwprintw(wkufer, 3, 4, "znalazles eliksir ZYCIA  ");
     gracz.hp += wynik + 5;
   }
   if (los > 5) {
@@ -591,9 +607,9 @@ void sklep() {
   mvwprintw(wsklep, 2, 1, "****************    ****************");
   mvwprintw(wsklep, 3, 1, "******   *****        **************");
   mvwprintw(wsklep, 4, 1, "******   *                **********");
-  mvwprintw(wsklep, 5, 1, "******       +++++++++       *******");
-  mvwprintw(wsklep, 6, 1, "****         + SKLEP +          ****");
-  mvwprintw(wsklep, 7, 1, "***          +++++++++           ***");
+  mvwprintw(wsklep, 5, 1, "******   +++++++++++++++++   *******");
+  mvwprintw(wsklep, 6, 1, "****     +++++ SKLEP +++++      ****");
+  mvwprintw(wsklep, 7, 1, "***      +++++++++++++++++       ***");
   mvwprintw(wsklep, 8, 1, "****                            ****");
   mvwprintw(wsklep, 9, 1, "****    ******        *******   ****");
   mvwprintw(wsklep, 10, 1, "****    ******        *******   ****");
@@ -613,25 +629,25 @@ void sklep() {
       if (gracz.zloto >= 50) {
         gracz.zloto -= 50;
         gracz.hp += 10;
-        mvwprintw(wsklep, 6, 10, "KUPILES_ZYCIE");
+        mvwprintw(wsklep, 6, 10, "+ KUPILES ZYCIE +");
       } else
-        mvwprintw(wsklep, 6, 13, "BRAK_ZLOTA");
+        mvwprintw(wsklep, 6, 10, "+  BRAK  ZLOTA  +");
       break;
     case 1:
       if (gracz.zloto >= 100) {
         gracz.zloto -= 100;
         gracz.sila += 1;
-        mvwprintw(wsklep, 6, 10, "KUPILES_SILE");
+        mvwprintw(wsklep, 6, 10, "+ KUPILES  SILE +");
       } else
-        mvwprintw(wsklep, 6, 13, "BRAK_ZLOTA");
+        mvwprintw(wsklep, 6, 10, "+  BRAK  ZLOTA  +");
       break;
     case 2:
       if (gracz.zloto >= 100) {
         gracz.zloto -= 100;
         gracz.moc += 1;
-        mvwprintw(wsklep, 6, 10, "KUPILES_MOC");
+        mvwprintw(wsklep, 6, 10, "+  KUPILES MOC  +");
       } else
-        mvwprintw(wsklep, 6, 13, "BRAK_ZLOTA");
+        mvwprintw(wsklep, 6, 10, "+  BRAK  ZLOTA  +");
       break;
     }
     wrefresh(wsklep);
@@ -704,6 +720,8 @@ int sklep_menu(int menu) {
 }
 
 void wczytaj_mape() {
+  if (gracz.poziom > 10)
+    gracz.poziom=0;
   int pozycja_pliku = 578 * gracz.poziom;
   std::fstream plik;
   plik.open("source/plansze.bin", std::ios::binary | std::ios::in);
