@@ -166,7 +166,7 @@ void draw(int tab_plansza[17][17]) {
   }
   refresh();
   box(plansza, 0, 0);
-  mvwprintw(plansza, 0, plansza_y / 2 - 3, "poziom %d", gracz.poziom);
+  mvwprintw(plansza, 0, plansza_y / 2 - 3, "poziom %d", gracz.mapa);
   WINDOW *Gracz = newwin(2, 4, gracz.x * 2 + 1, gracz.y * 4 + 1);
   mvwprintw(Gracz, 0, 1, "_o_");
   mvwprintw(Gracz, 1, 1, ",^,");
@@ -245,6 +245,7 @@ void interakcja(postac &gracz, int inp, int tab_plansza[17][17]) {
     gory(gracz);
     break;
   case 4:
+    gracz.mapa++;
     gracz.poziom++;
     sklep();
     wczytaj_mape();
@@ -291,7 +292,7 @@ int mwalka(postac &gracz) {
   WINDOW *wmwalka = newwin(mwalka.kolumny, mwalka.wiersze, mwalka.x, mwalka.y);
   box(wmwalka, 0, 0);
   mag m1;
-  int lvl = 4 * (gracz.poziom);
+  int lvl = 3 * (1 + gracz.poziom) - 2;
   m1.poziom(kosc(1 + gracz.poziom)+lvl);
   while (!gracz.smierc && !m1.smierc) {
     wclear(wmwalka);
@@ -351,8 +352,8 @@ int wwalka(postac &gracz) {
   WINDOW *wwwalka = newwin(wwalka.kolumny, wwalka.wiersze, wwalka.x, wwalka.y);
   box(wwwalka, 0, 0);
   woj w1;
-  int lvl = 4 * (gracz.poziom);
-  w1.poziom(kosc(2 + gracz.poziom)+lvl);
+  int lvl = 3 * (1 + gracz.poziom) - 2;
+  w1.poziom(kosc(1 + gracz.poziom)+lvl);
   while (!gracz.smierc && !w1.smierc) {
     wclear(wwwalka);
     box(wwwalka, 0, 0);
@@ -411,7 +412,7 @@ int swalka(postac &gracz) {
   WINDOW *wswalka = newwin(swalka.kolumny, swalka.wiersze, swalka.x, swalka.y);
   box(wswalka, 0, 0);
   str s1;
-  int lvl = 6 * (1 + gracz.poziom);
+  int lvl = 6 * (1 + gracz.poziom) - 5;
   s1.poziom(kosc(3 + gracz.poziom)+lvl);
   switch (kosc(2) + 1) {
   case 1:
@@ -482,7 +483,7 @@ int swalka(postac &gracz) {
 
 int walka(int przeciwnik, int gracz) {
   int kosc_przeciwnik = kosc(6);
-  int kosc_gracz = kosc(6);
+  int kosc_gracz = kosc(7);
   okno walka;
   WINDOW *wwalka = newwin(walka.kolumny, walka.wiersze, walka.x, walka.y);
   wclear(wwalka);
@@ -720,9 +721,9 @@ int sklep_menu(int menu) {
 }
 
 void wczytaj_mape() {
-  if (gracz.poziom > 10)
-    gracz.poziom=0;
-  int pozycja_pliku = 578 * gracz.poziom;
+  if (gracz.mapa > 10)
+    gracz.mapa=0;
+  int pozycja_pliku = 578 * gracz.mapa;
   std::fstream plik;
   plik.open("source/plansze.bin", std::ios::binary | std::ios::in);
   if (plik.is_open()) {

@@ -22,13 +22,13 @@ struct okno {
 };
 
 struct postac {
-  int hp, sila, moc, exps, expm, pokonani, zloto, x, y, klucz, poziom;
+  int hp, sila, moc, exps, expm, mapa, zloto, x, y, klucz, poziom;
   bool smierc;
   postac() {
     hp = 20;
     sila = 10;
     moc = 10;
-    exps = expm = pokonani = zloto = klucz = poziom = 0;
+    exps = expm = mapa = zloto = klucz = poziom = 0;
     x = y = 2;
     smierc = false;
   }
@@ -36,7 +36,7 @@ struct postac {
     hp = 20;
     sila = 10;
     moc = 10;
-    exps = expm = pokonani = zloto = klucz = poziom = 0;
+    exps = expm = mapa = zloto = klucz = poziom = 0;
     x = y = 2;
     smierc = false;
   }
@@ -48,7 +48,7 @@ struct mag {
   bool smierc;
   mag() {
     hp = 8;
-    moc = 6;
+    moc = 4;
     smierc = false;
   }
   mag(int h, int m, bool sm) {
@@ -69,7 +69,7 @@ struct woj {
   bool smierc;
   woj() {
     hp = 10;
-    sila = 6;
+    sila = 4;
     smierc = false;
   }
   woj(int h, int s, bool sm) {
