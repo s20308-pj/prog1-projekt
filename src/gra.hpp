@@ -99,12 +99,13 @@ struct str {
     smierc = sm;
   }
   void poziom(int poziom) {
-    hp += poziom * 2;
+    hp += poziom * 3;
     atak += poziom;
   }
   ~str() {}
 };
 
+void intro();
 void setup();
 void draw(int[17][17]);
 void stat();

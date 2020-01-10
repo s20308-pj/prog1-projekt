@@ -8,6 +8,8 @@ extern int inp;
 int main() {
   initscr();
   noecho();
+  curs_set(0);
+  intro();
   setup();
   int menu = menu_input();
   while (!KoniecGry) {

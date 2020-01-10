@@ -15,6 +15,129 @@ postac gracz;
 
 int kosc(int x) { return rand() % x + 1; }
 
+
+void intro()
+{
+	WINDOW *wintro=newwin(29, 71, 4, 2);
+	box(wintro, 0, 0);
+	mvwprintw(wintro, 3, 2, "                                                              000  ");
+	mvwprintw(wintro, 4, 2, "                                                             00000 ");
+	mvwprintw(wintro, 5, 2, "^           ^                  ^     ^          ^             000  ");
+	mvwprintw(wintro, 6, 2, "^^  ^^     ^^^         ^     ^ ^^   ^^^        ^^^       ^      ^  ");
+	mvwprintw(wintro, 7, 2, "^^ ^^^^   ^^^^^       ^^^   ^^^^^^ ^^^^^      ^^^^^     ^^^    ^^^ ");
+	mvwprintw(wintro, 8, 2, "^ ^^^^^^ ^^^^^^^   ^ ^^^^^ ^^^^^^^^ ^^^^^   ^^^^^^^^   ^^^^^^ ^^^^^");
+	mvwprintw(wintro, 9, 2, " ^^^^^^ # # # # ^^ ^^^^ # # # # ^^^^^ # # # # ^^^^^^^ # # # # ^ ^^^^");
+	mvwprintw(wintro, 10, 2, "^^^^^^^ ##### ^^ ^^^^^^ ##### ^^^^^^^ ##### ^^^^^ ^^^ ##### ^^^ ^^^");
+	mvwprintw(wintro, 11, 2, "^^^^^^^ ## ## ^ ^^^^^^^ ## ## ^^^^^^^ ## ## ^^^ ^^^^^ ## ## ^^^^ ^^");
+	mvwprintw(wintro, 12, 2, "# # # # ##### # # # # # ##### # # # # ##### # # # # # ##### # # # #");
+	mvwprintw(wintro, 13, 2, "#################################+#################################");
+	mvwprintw(wintro, 14, 2, "###############################+++++###############################");
+	mvwprintw(wintro, 15, 2, "###############################+++++###############################");
+	mvwprintw(wintro, 16, 2, "###############################+++++###############################");
+	mvwprintw(wintro, 20, 2, "       ***                ***           ***     ***             ***");
+	mvwprintw(wintro, 21, 2, "     *******            *******       ******* *******          ****");
+	mvwprintw(wintro, 22, 2, "     *******  ***       *******       ******* *******  ***     ****");
+	mvwprintw(wintro, 23, 2, "      *****  *****       *****         *****   *****  *****     *#*");
+	mvwprintw(wintro, 24, 2, "        #     ***          #             #       #     ***       # ");
+	mvwprintw(wintro, 25, 2, "........#......#...........#.............#.......#......#........#.");
+	refresh();
+	wrefresh(wintro);
+	WINDOW *wgracz = newwin(3,5, 21, 4);
+	mvwprintw(wgracz,0,1,"_o_");
+	mvwprintw(wgracz,1,1,",^,");
+	mvwprintw(wgracz,2,1,"   ");
+	move(0,0);
+	for (int i=4; i<36; i++) {
+		mvwin(wgracz, 21,i);
+		wrefresh(wgracz);
+		usleep(150000);
+	}
+	usleep(350000);
+	for (int i=0;i<3;i++){
+		mvwprintw(wintro, 16-i, 33, "     ");
+		wrefresh(wintro);
+		usleep(250000);
+	}
+	usleep(800000);
+	for (int i=21; i>17; i--) {
+		mvwin(wgracz, i,35);
+		wrefresh(wgracz);
+		usleep(180000);
+	}
+	wclear(wgracz);
+	delwin(wgracz);
+	wrefresh(wintro);
+	for (int i=0;i<3;i++){
+		mvwprintw(wintro, 14+i, 33, "+++++");
+		wrefresh(wintro);
+		usleep(250000);
+	}
+	usleep(800000);
+	wclear(wintro);
+	wrefresh(wintro);
+mvwprintw(wintro, 1, 32, "WITAJ");//5
+wrefresh(wintro);
+usleep(600000);
+mvwprintw(wintro, 3, 19, "Przed Toba podroz po labiryncie.");//32 
+wrefresh(wintro);
+usleep(600000);
+mvwprintw(wintro, 5, 16, "Do poruszania postaci uzywaj strzalek,");//39
+wrefresh(wintro);
+usleep(600000);
+mvwprintw(wintro, 6, 11, "klawiszem x wychodzisz z gry, a m wywoluje menu.");//48
+wrefresh(wintro);
+usleep(600000);
+mvwprintw(wintro, 8, 16, "Twoja postac opisuje kilka statystyki:");//38
+wrefresh(wintro);
+usleep(600000);
+mvwprintw(wintro, 10, 20, "ZYCIE - okresla twoja witalnosc,");//32
+wrefresh(wintro);
+usleep(600000);
+mvwprintw(wintro, 11, 17, "jezeli spadnie do zera, konczysz gre;");//37
+wrefresh(wintro);
+usleep(600000);
+mvwprintw(wintro, 12, 20, "SILA - to twoja sile fizyczna,");//30
+wrefresh(wintro);
+usleep(600000);
+mvwprintw(wintro, 13, 10, "potrzebna do walki z wojownikiem oraz straznikiem;");//50
+wrefresh(wintro);
+usleep(600000);
+mvwprintw(wintro, 14, 21, "MOC - to twoja moc mentalna,");//28
+wrefresh(wintro);
+usleep(600000);
+mvwprintw(wintro, 15, 13, "potrzebna do walki z magiem oraz straznikiem;");//45
+wrefresh(wintro);
+usleep(600000);
+mvwprintw(wintro, 17, 9, "W czasie gry spotkasz nastepujace typy przeciwnikow:");//52
+wrefresh(wintro);
+usleep(600000);
+mvwprintw(wintro, 18, 6, "wojownik - atakuje sila, gdy go zabijesz znajdziesz ZLOTO;");//58
+wrefresh(wintro);
+usleep(600000);
+mvwprintw(wintro, 19, 7, "mag - atakuje moca, po jego smierci masz szanse na ZYCIE;");//57
+wrefresh(wintro);
+usleep(600000);
+mvwprintw(wintro, 20, 6, "straznik - walczy z polaczonymi statystykami sily i mocy,");//58
+wrefresh(wintro);
+usleep(600000);
+mvwprintw(wintro, 21, 14, "po jego zabiciu dostaniesz KLUCZ do bramy;");//42
+wrefresh(wintro);
+usleep(600000);
+mvwprintw(wintro, 23, 3, "Dodatkowo mozesz znalesc kufry ze zlotem, kluczem lub eliksirami.");//65
+wrefresh(wintro);
+usleep(600000);
+mvwprintw(wintro, 25, 13, "Do przejscia przez brame potrzebujesz klucza.");//45
+wrefresh(wintro);
+usleep(600000);
+mvwprintw(wintro, 27, 30, "POWODZENIA!");//11
+wrefresh(wintro);
+usleep(600000);
+	getch();
+	wclear(wintro);
+	delwin(wintro);
+}
+
+
 void setup() {
   clear();
   KoniecGry = false;
@@ -23,22 +146,8 @@ void setup() {
   plansza_mx = width;
   plansza_my = height;
   inp = 1;
-  WINDOW *winsetup = newwin(9, 41, 15, 15);
-  box(winsetup, 0, 0);
-  mvwprintw(winsetup, 1, 6, "   ___      ____      ___ ");
-  mvwprintw(winsetup, 2, 6, "  /   \\    ||   \\    /   \\ ");
-  mvwprintw(winsetup, 3, 6, " ||    |   ||    |  ||    | ");
-  mvwprintw(winsetup, 4, 6, " ||   __   ||___/   ||____| ");
-  mvwprintw(winsetup, 5, 6, " ||    |   ||   \\   ||    | ");
-  mvwprintw(winsetup, 6, 6, "  \\___/    ||    |  ||    | ");
-  mvwprintw(winsetup, 0, 16, "s20308");
   gracz.zerowanie();
   wczytaj_mape();
-  refresh();
-  wrefresh(winsetup);
-  getch();
-  wclear(winsetup);
-  delwin(winsetup);
   refresh();
 }
 
@@ -64,18 +173,16 @@ int menu_input() {
     case KEY_UP:
       menu--;
       if (menu == -1)
-        menu = 0;
+        menu = 4;
       break;
     case KEY_DOWN:
       menu++;
       if (menu == 5)
-        menu = 4;
+        menu = 0;
       break;
     default:
       break;
     }
-    if (wybor == 10)
-      break;
     okno nmanu;
     WINDOW *wnmanu = newwin(nmanu.kolumny, nmanu.wiersze, nmanu.x, nmanu.y);
     box(wnmanu, 0, 0);
@@ -99,6 +206,8 @@ int menu_input() {
     default:
       break;
     }
+    if (wybor == 10)
+      break;
     wrefresh(wnmanu);
   }
   wclear(winmenu);
@@ -166,18 +275,17 @@ void draw(int tab_plansza[17][17]) {
   }
   refresh();
   box(plansza, 0, 0);
-  mvwprintw(plansza, 0, plansza_y / 2 - 3, "poziom %d", gracz.mapa);
+  mvwprintw(plansza, 0, plansza_y / 2 - 3, "poziom %d", gracz.poziom);
   WINDOW *Gracz = newwin(2, 4, gracz.x * 2 + 1, gracz.y * 4 + 1);
   mvwprintw(Gracz, 0, 1, "_o_");
   mvwprintw(Gracz, 1, 1, ",^,");
-  move(0, 0);
   wrefresh(plansza);
   wrefresh(Gracz);
 }
 
 void stat() {
-  mvprintw(38, 5, "\t\t\t\t\t\t\t\t\t\t\t");
-  mvprintw(38, 5, "ZYCIE %d  \t  SILA %d \tMOC %d  \tZLOTO %d \tKLUCZ %d",
+  mvprintw(38, 5, "\t\t\t\t\t\t\t\t\t\t");
+  mvprintw(38, 5, "ZYCIE %d  \t SILA %d \tMOC %d  \tZLOTO %d \tKLUCZ %d",
            gracz.hp, gracz.sila, gracz.moc, gracz.zloto, gracz.klucz);
   refresh();
 }
@@ -678,12 +786,12 @@ int sklep_menu(int menu) {
     case KEY_UP:
       menu--;
       if (menu == -1)
-        menu = 0;
+        menu = 3;
       break;
     case KEY_DOWN:
       menu++;
       if (menu == 4)
-        menu = 3;
+        menu = 0;
       break;
     default:
       break;
